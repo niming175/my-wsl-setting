@@ -14,17 +14,16 @@
 sudo  mv /etc/apt/sources.list /etc/apt/sources.list.backup
 
 # 新建/etc/apt/source.list文件，并将以下内容复制进去
-deb http://mirrors.aliyun.com/ubuntu/ trusty main multiverse restricted universe
-deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main multiverse restricted universe
-deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main multiverse restricted universe
-deb http://mirrors.aliyun.com/ubuntu/ trusty-security main multiverse restricted universe
-deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main multiverse restricted universe
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty main multiverse restricted universe
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main multiverse restricted universe
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main multiverse restricted universe
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main multiverse restricted universe
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main multiverse restricted universe
-
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
 # 保存退出，然后输入sudo apt update 更新源，会发现快很多
 ```
 
