@@ -26,6 +26,21 @@ deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted univer
 deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
 # 保存退出，然后输入sudo apt update 更新源，会发现快很多
 ```
+**3、修改磁盘挂载路径**  
+win10下的`C`盘或`D`盘会挂载在`/mnt`下，所以需要修改下挂载路径
+```bash
+# 新建/etc/wsl.conf文件，输入以下内容
+[automount]
+root = /
+options = "metadata"
+```
+再重启电脑即可， 这里之所以要修改u挂载路径，主要是在运行`docker-compose`的时候，解决编译后找不到文件挂载问题
+
+**4、安装terminal**  
+`win10`下自带的`cmd`太丑了，而且也不支持多`TAB`页面， 所以微软家出了新的`windows terminal`支持文字快捷键放大放小， 支持多`tab`,新版的还支持垂直分屏  
+这个在`store商店`里可安装，但是支持`1903`以上的版本
+
+
 ### 常用软件推荐
 
 **1、tmux**
@@ -53,4 +68,20 @@ deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted unive
 sudo apt-add-repository ppa:fish-shell/release-3
 sudo apt-get update
 sudo apt-get install fish
+
+# 设置默认的shell
+chsh -s /usr/local/bin/fish
+echo /usr/local/bin/fish | sudo tee -a /etc/shells
+```
+
+**3、oh-my-fish**
+`oh-my-fish`是`fish-shell`的主题管理插件,装上这个后， 可以安装和切换主题  
+```bash
+# 安装
+curl -L https://get.oh-my.fish | fish
+
+# 以上操作，不翻墙的话，会报443操作， 所以可以用git源码来安装
+git clone https://github.com/oh-my-fish/oh-my-fish
+cd oh-my-fish
+bin/install --offline
 ```
