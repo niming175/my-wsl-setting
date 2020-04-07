@@ -84,4 +84,45 @@ curl -L https://get.oh-my.fish | fish
 git clone https://github.com/oh-my-fish/oh-my-fish
 cd oh-my-fish
 bin/install --offline
+
+# 查看可安装的主题
+omf theme
+# 安装主题
+omf install es
+# 切换已经安装的主题
+```
+omf theme es
+
+
+**4、neo-vim**
+```bash
+# 直接安装
+sudo apt install neovim
+# 但是直接安装的并不是最新版本(mac 用brew 安装的就是最新版本 ) 
+
+# 源码编译安装最新版本
+# 参考这个教程https://www.jianshu.com/p/5df7fbbb5371
+# 在编译的时候，可能会遇到下载依赖包，报433错误，那个是因为网络问题，只有翻墙才能解决
+```
+**5、autojump**
+智能跳转，如果某个目录是我们常打开的，比如项目工程目录，那么每次进去，只要输入几个字符即可，就不用输入完成的路径
+```bash
+# 安装
+sudo apt-get install autojump
+
+# 在.config/fish/config.fish 加入一下内容
+[ -f /usr/share/autojump/autojump.fish ]; and source /usr/share/autojump/autojump.fish
+```
+使用的时候，可以用`j <目标路径>`来进入，前提是那个路径曾经打开过
+
+**6、docker-compose**
+```bash
+# 下载并安装
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose 
+
+# 给用户添加执行权限
+sudo chmod +x /usr/local/bin/docker-compose
+
+# 添加软链
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
