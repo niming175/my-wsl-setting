@@ -75,6 +75,7 @@ echo /usr/local/bin/fish | sudo tee -a /etc/shells
 ```
 
 **3、oh-my-fish**
+
 `oh-my-fish`是`fish-shell`的主题管理插件,装上这个后， 可以安装和切换主题  
 ```bash
 # 安装
@@ -90,9 +91,8 @@ omf theme
 # 安装主题
 omf install es
 # 切换已经安装的主题
-```
 omf theme es
-
+```
 
 **4、neo-vim**
 ```bash
@@ -104,8 +104,10 @@ sudo apt install neovim
 # 参考这个教程https://www.jianshu.com/p/5df7fbbb5371
 # 在编译的时候，可能会遇到下载依赖包，报433错误，那个是因为网络问题，只有翻墙才能解决
 ```
-**5、autojump**
+
+**5、autojump**  
 智能跳转，如果某个目录是我们常打开的，比如项目工程目录，那么每次进去，只要输入几个字符即可，就不用输入完成的路径
+
 ```bash
 # 安装
 sudo apt-get install autojump
@@ -125,4 +127,38 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 # 添加软链
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# 因为wsl 不能直接运行docker, 所以需要下载docker desktop, 同时需要暴露2375端口
+# 在~/.config/fish/config.fish 加入这行
+export DOCKER_HOST=tcp://localhost:2375
+
+# 如果项目的文件在宿主机的c,d之类的盘下，需要修改挂载，默认挂载在/mnt下，这样docker-composer 起来话，会的找不到项目文件
+# 顺便一讲， 如果不翻墙的话，docker-composer 几乎build都会失败， 镜像加速只是在下载镜像的时候会快点，但是编译的时候会下载额外的插件
+```
+
+**7.nvm**  
+[nvm](https://github.com/nvm-sh/nvm) 是node多版本管理工具
+```bash
+# 安装
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+# 同样不翻墙的话，这个会包433错误，所以选择用git源码安装
+git clone https://github.com/nvm-sh/nvm.git .nvm
+cd .nvm
+# 切到最新版本
+git checkout v0.35.3
+
+# 在.bashrc最后一行加入以下代码
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# 不过我们用的shell是fish， 所以需要在fish下加入对nvm的支持
+# 利用oh-my-fish安装
+omf install https://github.com/FabioAntunes/fish-nvm
+omf install https://github.com/edc/bass
+
+# 重新进入下fish就可以生效了
+nvm --version
 ```
