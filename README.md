@@ -117,7 +117,9 @@ sudo apt-get install autojump
 ```
 使用的时候，可以用`j <目标路径>`来进入，前提是那个路径曾经打开过
 
-**6、docker-compose**
+### 适用于开发的软件推荐
+**1、docker-compose**  
+docker是可以运行mysql, php 等开发常环境的容器
 ```bash
 # 下载并安装
 sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose 
@@ -136,7 +138,7 @@ export DOCKER_HOST=tcp://localhost:2375
 # 顺便一讲， 如果不翻墙的话，docker-composer 几乎build都会失败， 镜像加速只是在下载镜像的时候会快点，但是编译的时候会下载额外的插件
 ```
 
-**7.nvm**  
+**2.nvm**  
 [nvm](https://github.com/nvm-sh/nvm) 是node多版本管理工具
 ```bash
 # 安装
@@ -161,4 +163,27 @@ omf install https://github.com/edc/bass
 
 # 重新进入下fish就可以生效了
 nvm --version
+
+# 安装指定版本
+nvm install v10.13
+
+# 有个问题，还是网络问题，不翻墙的话，安装会超级慢，所以需要修改nvm 安装node版本的
+# 在~/.nvm/nvm.sh文件中，搜索NVM_NODEJS_ORG_MIRROR， 将后面的地址替换成https://npm.taobao.org/mirrors/node/即可
+
+# 切换node版本
+nvm use v10.13
 ```
+
+**3、mycli**  
+[mycli](https://github.com/dbcli/mycli)一个很好用的mysql终端软件，他具有提示功能，且很简洁
+```bash
+# 安装
+sudo apt install mycli
+
+
+# 如果我们在shell配置中加入alias命令预设，就可以直接通过短命令进入数据库
+# 在~/.config/fish/config.fish加入
+:alias local_sql='mycli -uroot -proot'
+```
+
+
