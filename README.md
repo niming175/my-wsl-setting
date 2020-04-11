@@ -1,7 +1,21 @@
 ### 写在前面
-+ 什么事`wsl`
-+ 为什么要用wsl
-+ 为什么不用传统win10, 或则linux, 已经mac
+**什么是`wsl`**  
+就是运行在win10里的一个linux系统， 并不是什么双系统或者虚拟机，而是唤出终端就可以直接用的linux系统
+
+**为什么要用wsl**  
+wsl 并不是非要去了解去熟悉的一个东西，没必要去掌握，去应用，就算能熟练玩转wsl,也并不一定说有多厉害之类的；但是有以下几点需要强调下：  
+1、首先，做程序开发，特别是特别依赖终端命令的开发，win10下cmd终端并不是友好，而且cmd下没有像linux那么多的命令和软件扩展  
+2、其次是，不管我们是做前端或者是后端，多多少少都要去了解下linux环境， 因为程序运行的环境j就是linux下，如果我们只在纯win10 下做开发，确实能完成任务，但肯定会到某个点后就停滞不前了，因为有些功能只能在linux环境下去实现  
+3、最后一个就是远程维护，win10 下的话，我们可能都会利用远程桌面进入进行修改代码，但是远程桌面很容易受网络环境的影响，而且很不方便；如果对linux有点了解的话，就可以直接ssh进去，如果平时习惯用`vim`敲代码的话，就可以很方便的修改代码  
+
+**为什么不直接用`linux`, 或者换`mac`**  
+`linux`下做开发，肯定是最佳的开发环境，最接近服务器的运行环境，但是有点很致命，就是很糟糕的办公软件生态，比如qq，微信之类的，虽然用有各种第三方方案解决这个问题，比如`wine`(可在linux下运行win10软件的环境)，但是都不是很完美的。  
+而`mac`就很好的兼顾了软件生态和开发环境。所以很多程序员也正因此选择mac为办公电脑。但是，mac唯一不好的一点就是，忒贵了， 都够程序员植半个头的头发了  
+
+**WSL的优势**  
++ 因为`wsl`是运行在win10 下，并不需要特地装个linux系统； 
++ 其次是，唤出终端就可以直接使用linux命令， 这比虚拟机方便得多
++ 最要的一点是，学习成本很低
 
 ### 快速配置wsl
 **1、安装**  
@@ -34,12 +48,71 @@ win10下的`C`盘或`D`盘会挂载在`/mnt`下，所以需要修改下挂载路
 root = /
 options = "metadata"
 ```
-再重启电脑即可， 这里之所以要修改u挂载路径，主要是在运行`docker-compose`的时候，解决编译后找不到文件挂载问题
+再重启终端即可， 这里之所以要修改u挂载路径，主要是在运行`docker-compose`的时候，解决编译后找不到文件挂载问题
 
 **4、安装terminal**  
 `win10`下自带的`cmd`太丑了，而且也不支持多`TAB`页面， 所以微软家出了新的`windows terminal`支持文字快捷键放大放小， 支持多`tab`,新版的还支持垂直分屏  
 这个在`store商店`里可安装，但是支持`1903`以上的版本
 
+**5、中文支持**
+```bash
+# 打开中支持
+sudo vim /etc/locale.gen
+# 找到zh_CN.UTF-8, 去掉前面的# 即可
+# 将默认的local改为中文
+sudo vim /etc/default/locale
+# 将内容改为
+LANG=zh_CN.UTF-8
+
+# 安装基础包
+sudo apt install language-pack-zh-hans
+
+# 安装中桌面中文版，wsl是可以做虚拟桌面的
+sudo apt install language-pack-gnome-zh-hans
+sudo apt install language-pack-kde-zh-hans
+
+# 安装中文手册， 也就是man 命令
+sudo apt install manpages-zh
+
+# 最后重启下终端，用man查看指令的说明，如man ls 就可以看到中文解释了
+```
+
+**6、打开ssh服务**  
+有时候在家的时候，需要远程进入公司的电脑改下东西，所以就需要sshw服务
+```bash
+# 安装ssh服务
+sudo apt-get install openssh-server
+
+# 修改ssh配置文件
+sudo vi /etc/ssh/sshd_config
+
+# 去掉Port 22 的注释，默认的ssh都是22端口，这里可以修改端口
+# 修改PasswordAuthentication 改为yes,允许密码登录
+# windows 下可能需要设置防火墙（具体百度），允许22端口进入，不然进不去
+```
+
+**设置ssh自启**  
+设置自启，这样子就每次打开电脑，就会打开ssh, win10 也可以当作一台linux服务器
+
+创建自启wsl文件， 创建/etc/init.wsl, 输入以下内容
+```
+#! /bin/sh
+/etc/init.d/ssh $1
+```
+添加执行权限
+>sudo chmod +x /etc/init.wsl
+
+编辑sudoer,可以免密执行
+>sudo vim /etc/sudoers
+添加这一行内容
+>%sudo ALL=NOPASSWD: /etc/init.wsl
+
+这样就可以自启ssh, 但是还不够，需要宿主机，也就是我们的电脑打开的时候，就要启动ssh  
+创建一个自启vbs文件, 内容为
+>Set ws = WScript.CreateObject("WScript.Shell")  
+>ws.run "ubuntu run sudo /etc/init.wsl start", vbhide
+
+按win + R 按键，唤出运行，输入`shell:startup`, 打开一个文件夹， 将刚才创建的文件复制进去即可
 
 ### 常用软件推荐
 
@@ -62,8 +135,8 @@ options = "metadata"
 + `tmux`的组合热键是`Ctrl b`, 然后再按下第三个键；
 + 在终端输入`tmux att`可以进入挂起的进程
 
-**2、fish-shell**
-(fish)[https://github.com/fish-shell/fish-shell]终端带提示补全功能的`shell`,支持自定义主题
+**2、fish-shell**  
+[fish](https://github.com/fish-shell/fish-shell)终端带提示补全功能的`shell`,支持自定义主题
 ```bash
 sudo apt-add-repository ppa:fish-shell/release-3
 sudo apt-get update
@@ -183,7 +256,9 @@ sudo apt install mycli
 
 # 如果我们在shell配置中加入alias命令预设，就可以直接通过短命令进入数据库
 # 在~/.config/fish/config.fish加入
-:alias local_sql='mycli -uroot -proot'
+alias local_sql='mycli -uroot -proot'
 ```
+
+
 
 
