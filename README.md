@@ -191,8 +191,33 @@ sudo apt-get install autojump
 使用的时候，可以用`j <目标路径>`来进入，前提是那个路径曾经打开过
 
 ### 适用于开发的软件推荐
-**1、docker-compose**  
-docker是可以运行mysql, php 等开发常环境的容器
+**1、docker**  
+docker是可以运行mysql, php 等开发常环境的容器  
+但是wls下是不能直接用`dokcer`的， 所以我们需要先安装win10 专用的`docker Desktop`软件，具体怎么安装，自己百度啦！
+```bash
+# 为了能在wsl下也能使用docker,所以也需要安装个linux的docker
+sudo apt install docker.io
+# 赋予用户执行权限
+sudo usermod -aG docker $USER
+# 随后以管理员的身份打开wls
+sudo cgroupfs-mount
+# 开启docker
+sudo service docker start
+
+# 在~/.config/fish/config.fish 加入这行, bash 的话，则是在~/.bashrc中加入
+# dokcer Desktop 中也要勾上‘Expose daemon on tcp://localhost:2375 without TLS’, 在setting中
+export DOCKER_HOST=tcp://localhost:2375
+
+# 测试
+# 查看版本
+docker version
+# run 个hello world
+docker run hello-world
+# 如果能输出内容，表示就可以啦
+
+```
+除了`docker`外，可能还需要用到`docker-composer`
+
 ```bash
 # 下载并安装
 sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose 
@@ -204,8 +229,6 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # 因为wsl 不能直接运行docker, 所以需要下载docker desktop, 同时需要暴露2375端口
-# 在~/.config/fish/config.fish 加入这行
-export DOCKER_HOST=tcp://localhost:2375
 
 # 如果项目的文件在宿主机的c,d之类的盘下，需要修改挂载，默认挂载在/mnt下，这样docker-composer 起来话，会的找不到项目文件
 # 顺便一讲， 如果不翻墙的话，docker-composer 几乎build都会失败， 镜像加速只是在下载镜像的时候会快点，但是编译的时候会下载额外的插件
@@ -258,7 +281,13 @@ sudo apt install mycli
 # 在~/.config/fish/config.fish加入
 alias local_sql='mycli -uroot -proot'
 ```
-
-
+### 好用的工具
+1、远程传输工具`rsync`  
+有时候，我们需要传很大的文件到服务器端，但是文件太大，用`scp`很容易断掉，断掉又要重新传，用`rsync`这个工具就可以实现断点续传，同时还能显示进度
+```bash
+rsync -P --rsh=ssh ~/test.tar niming175@192.168.16.37:~/test.tar
+# -P: 是包含了 “–partial –progress”， 部分传送和显示进度
+# -rsh=ssh 表示使用ssh协议传送数据
+```
 
 
