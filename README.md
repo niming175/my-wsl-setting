@@ -114,6 +114,11 @@ sudo vi /etc/ssh/sshd_config
 
 按win + R 按键，唤出运行，输入`shell:startup`, 打开一个文件夹， 将刚才创建的文件复制进去即可
 
+**7、git**
+wsl是默认安装的git的，可以不需要额外的去安装git,默认也支持git高亮；但是部分细节需要修改；git对中文路径可能会显示异常，所以要如此设置
+```bash
+git config --global core.quotepath false
+```
 ### 常用软件推荐
 
 **1、tmux**
